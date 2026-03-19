@@ -103,6 +103,10 @@ const examSchema = new mongoose.Schema({
       min: 1,
       max: 10
     },
+    requireScreenShare: {
+      type: Boolean,
+      default: false
+    },
     showResultImmediately: {
       type: Boolean,
       default: false

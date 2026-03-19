@@ -194,6 +194,7 @@ export default function ExamFormPage() {
               ['enableTabSwitchDetection', 'Tab Switch Detection'],
               ['autoSubmitViolations', 'Auto-Submit on Max Violations'],
               ['showResultImmediately', 'Show Result Immediately'],
+              ['requireScreenShare', 'Require Screen Sharing'],
             ].map(([key, label]) => (
               <label key={key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', background: 'var(--bg-glass)', borderRadius: 'var(--radius-md)', cursor: 'pointer' }}>
                 <span style={{ fontWeight: 500 }}>{label}</span>

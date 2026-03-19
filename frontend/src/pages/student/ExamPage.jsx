@@ -6,7 +6,7 @@ import { useSocket } from '../../context/SocketContext';
 import Button from '../../components/ui/Button';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
-import { Clock, ChevronLeft, ChevronRight, Flag, Send, AlertTriangle } from 'lucide-react';
+import { Clock, ChevronLeft, ChevronRight, Flag, Send, AlertTriangle, MonitorPlay } from 'lucide-react';
 import toast from 'react-hot-toast';
 import './ExamPage.css';
 
@@ -14,7 +14,7 @@ export default function ExamPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const socket = useSocket();
-  const [loading, setLoading] = useState(true);
+  const [setupStep, setSetupStep] = useState('fetching'); // fetching -> permissions -> starting -> taking
   const [exam, setExam] = useState(null);
   const [attempt, setAttempt] = useState(null);
   const [currentQ, setCurrentQ] = useState(0);
@@ -24,21 +24,34 @@ export default function ExamPage() {
   const [submitting, setSubmitting] = useState(false);
   const [violationCount, setViolationCount] = useState(0);
   const [maxViolations, setMaxViolations] = useState(3);
+  const [mediaStream, setMediaStream] = useState(null);
+  
   const timerRef = useRef(null);
-  const hasStartedRef = useRef(false);
   const lastViolationRef = useRef({});
   const autoSubmittingRef = useRef(false);
 
   useEffect(() => {
-    if (!hasStartedRef.current) {
-      hasStartedRef.current = true;
-      startExam();
-    }
+    const fetchExamPrep = async () => {
+      try {
+        const res = await api.get(EXAMS.DETAIL(id));
+        const examData = res.data?.data || res.data;
+        setExam(examData);
+        
+        if (examData.settings?.requireScreenShare) {
+          setSetupStep('permissions');
+        } else {
+          executeStartExam(examData);
+        }
+      } catch (err) {
+        toast.error(err.response?.data?.message || 'Failed to load exam details');
+        navigate('/student/exams');
+      }
+    };
+    fetchExamPrep();
+  }, [id, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return () => clearInterval(timerRef.current);
-  }, []);
-
-  const startExam = async () => {
+  const executeStartExam = async (examDataObj) => {
+    setSetupStep('starting');
     try {
       const res = await api.post(EXAMS.START(id));
       const data = res.data.data || res.data;
@@ -47,26 +60,47 @@ export default function ExamPage() {
         _id: data.attempt?._id || data.attempt?.id,
       };
 
-      setExam(data.exam);
+      setExam(data.exam || examDataObj);
       setAttempt(normalizedAttempt);
       setViolationCount(Number(normalizedAttempt?.violations || 0));
-      setMaxViolations(Number(data.exam?.settings?.maxViolations || 3));
-      const qs = data.exam?.questions || [];
+      setMaxViolations(Number((data.exam || examDataObj)?.settings?.maxViolations || 3));
+      const qs = (data.exam || examDataObj)?.questions || [];
       setAnswers(qs.map(q => ({ questionId: q._id, selectedOption: null, isVisited: false, isMarkedForReview: false })));
-      setTimeLeft((data.exam?.duration || 60) * 60);
+      setTimeLeft(((data.exam || examDataObj)?.duration || 60) * 60);
       if (socket && normalizedAttempt?._id) socket.emit('join-exam', id, normalizedAttempt._id);
+      
+      setSetupStep('taking');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to start exam');
       navigate('/student/exams');
     }
-    finally { setLoading(false); }
+  };
+
+  const handleRequestScreenShare = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({ 
+        video: { displaySurface: 'monitor', logicalSurface: true },
+        audio: false 
+      });
+      setMediaStream(stream);
+      executeStartExam(exam);
+    } catch (err) {
+      toast.error('You must share your screen to take this exam.');
+    }
   };
 
   const getAttemptId = () => attempt?._id || attempt?.id;
 
+  const cleanupStream = useCallback(() => {
+    if (mediaStream) {
+      mediaStream.getTracks().forEach(t => t.stop());
+    }
+  }, [mediaStream]);
+
   const handleAutoSubmit = useCallback(async (showToast = true) => {
     if (autoSubmittingRef.current) return;
     autoSubmittingRef.current = true;
+    cleanupStream();
 
     try {
       const attemptId = getAttemptId();
@@ -78,7 +112,7 @@ export default function ExamPage() {
     } catch {
       toast.error('Auto-submit failed. Please submit manually if possible.');
     }
-  }, [attempt, answers, navigate]);
+  }, [attempt, answers, navigate, cleanupStream]);
 
   const reportViolation = useCallback(async (type, details) => {
     if (!attempt || !exam) return;
@@ -114,9 +148,26 @@ export default function ExamPage() {
     }
   }, [attempt, exam, handleAutoSubmit]);
 
+  // Bind screen share stop listener to fresh reportViolation closure
+  useEffect(() => {
+    if (mediaStream && attempt) {
+      const track = mediaStream.getVideoTracks()[0];
+      const handleStop = () => {
+        toast.error('Screen sharing was stopped! Violation recorded.');
+        reportViolation('screen-share-stopped', 'Student stopped screen sharing via browser controls');
+      };
+      track.addEventListener('ended', handleStop);
+      return () => track.removeEventListener('ended', handleStop);
+    }
+  }, [mediaStream, attempt, reportViolation]);
+
+  useEffect(() => {
+    return () => cleanupStream();
+  }, [cleanupStream]);
+
   // Timer
   useEffect(() => {
-    if (timeLeft <= 0 || !attempt) return;
+    if (timeLeft <= 0 || setupStep !== 'taking') return;
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) { clearInterval(timerRef.current); handleAutoSubmit(); return 0; }
@@ -124,7 +175,7 @@ export default function ExamPage() {
       });
     }, 1000);
     return () => clearInterval(timerRef.current);
-  }, [attempt, handleAutoSubmit]);
+  }, [setupStep, handleAutoSubmit]); // Removed timeLeft dependency to avoid reset bugs
 
   const formatTime = (s) => {
     const m = Math.floor(s / 60); const sec = s % 60;
@@ -136,7 +187,7 @@ export default function ExamPage() {
     a[currentQ] = { ...a[currentQ], selectedOption: opt, isVisited: true };
     setAnswers(a);
     // Auto-save
-    if (socket && attempt) socket.emit('auto-save', { attemptId: attempt._id, answers: a });
+    if (socket && attempt) socket.emit('auto-save', { attemptId: getAttemptId(), answers: a });
   };
 
   const markForReview = () => {
@@ -147,17 +198,18 @@ export default function ExamPage() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    cleanupStream();
     try {
-      const attemptId = attempt?._id || attempt?.id;
+      const attemptId = getAttemptId();
       await api.post(EXAMS.SUBMIT(attemptId), { answers });
       toast.success('Exam submitted!');
       navigate('/student/results');
     } catch (err) { toast.error(err.response?.data?.message || 'Submit failed'); }
-    finally { setSubmitting(false); }
+    finally { setSubmitting(false); setSubmitOpen(false); }
   };
 
   useEffect(() => {
-    if (!attempt || !exam) return;
+    if (setupStep !== 'taking' || !attempt || !exam) return;
 
     const settings = exam.settings || {};
 
@@ -249,10 +301,29 @@ export default function ExamPage() {
       window.removeEventListener('beforeunload', onBeforeUnload);
       window.removeEventListener('popstate', onPopState);
     };
-  }, [attempt, exam, reportViolation]);
+  }, [setupStep, attempt, exam, reportViolation]);
 
-  if (loading) return <LoadingSpinner text="Loading exam..." />;
-  if (!exam) return null;
+  if (setupStep === 'fetching' || setupStep === 'starting') return <LoadingSpinner text="Preparing exam environment..." />;
+  
+  if (setupStep === 'permissions') {
+    return (
+      <div className="page-container flex items-center justify-center" style={{ minHeight: '80vh' }}>
+        <div className="glass-card" style={{ maxWidth: '480px', textAlign: 'center', padding: '3rem 2rem' }}>
+          <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(59,130,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: '#3b82f6' }}>
+            <MonitorPlay size={32} />
+          </div>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>Screen Share Required</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.6 }}>
+            This is a securely proctored exam. You are required to share your entire screen before starting. If you stop sharing during the exam, an anti-cheat violation will be automatically recorded.
+          </p>
+          <Button fullWidth onClick={handleRequestScreenShare} size="lg">Share Screen & Start Exam</Button>
+          <Button fullWidth variant="ghost" onClick={() => navigate('/student/exams')} style={{ marginTop: '1rem' }}>Cancel & Go Back</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!exam || setupStep !== 'taking') return null;
 
   const questions = exam.questions || [];
   const q = questions[currentQ];
