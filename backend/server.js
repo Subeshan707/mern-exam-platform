@@ -28,6 +28,10 @@ const { initializeSocket } = require('./utils/socketManager');
 const connectDB = require('./config/database');
 
 const app = express();
+
+// Trust reverse proxy (required for rate limiting behind Render/Vercel)
+app.set('trust proxy', 1);
+
 const httpServer = createServer(app);
 
 // Connect to database
