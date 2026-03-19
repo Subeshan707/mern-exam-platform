@@ -169,10 +169,15 @@ exports.getStudentDashboard = async (req, res) => {
     const currentExams = [];
     const completedExams = [];
 
+    const tzOffset = parseInt(req.headers['x-timezone-offset'] || '0');
+
     for (const exam of exams) {
       const examStartTime = new Date(exam.date);
-      const [hours, minutes] = exam.startTime.split(':');
-      examStartTime.setHours(parseInt(hours), parseInt(minutes), 0);
+      const [hours, minutes] = (exam.startTime || '00:00').split(':').map(Number);
+      
+      examStartTime.setUTCHours(hours);
+      examStartTime.setUTCMinutes(minutes + tzOffset);
+      examStartTime.setUTCSeconds(0);
       
       const examEndTime = new Date(examStartTime.getTime() + exam.duration * 60000);
 

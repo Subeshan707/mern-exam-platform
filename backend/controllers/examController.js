@@ -733,12 +733,16 @@ exports.startExam = async (req, res) => {
     }
 
     // Check if exam is available
+    const tzOffset = parseInt(req.headers['x-timezone-offset'] || '0');
     const now = new Date();
     const examStartTime = new Date(exam.date);
-    const [hours, minutes] = exam.startTime.split(':');
-    examStartTime.setHours(parseInt(hours), parseInt(minutes), 0);
+    const [hours, minutes] = (exam.startTime || '00:00').split(':').map(Number);
+    
+    examStartTime.setUTCHours(hours);
+    examStartTime.setUTCMinutes(minutes + tzOffset);
+    examStartTime.setUTCSeconds(0);
 
-    const examEndTime = new Date(examStartTime.getTime() + exam.duration * 60000);
+    const examEndTime = new Date(examStartTime.getTime() + (Number(exam.duration) || 0) * 60000);
 
     if (now < examStartTime) {
       return res.status(403).json({ 
@@ -1176,12 +1180,16 @@ exports.getStudentOngoingExams = async (req, res) => {
 
     const ongoingExams = [];
 
+    const tzOffset = parseInt(req.headers['x-timezone-offset'] || '0');
+
     for (const attempt of attempts) {
       const exam = attempt.exam;
       const examStartTime = new Date(exam.date);
-      const [hours, minutes] = exam.startTime.split(':');
-      examStartTime.setHours(parseInt(hours), parseInt(minutes), 0);
+      const [hours, minutes] = (exam.startTime || '00:00').split(':').map(Number);
       
+      examStartTime.setUTCHours(hours);
+      examStartTime.setUTCMinutes(minutes + tzOffset);
+      examStartTime.setUTCSeconds(0);
       const examEndTime = new Date(examStartTime.getTime() + exam.duration * 60000);
       const now = new Date();
 
