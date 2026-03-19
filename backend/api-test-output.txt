@@ -1,0 +1,154 @@
+﻿
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  ONLINE EXAM PLATFORM ΓÇö API TEST SUITE
+  Base URL: http://localhost:5000/api
+  Started:  2026-03-17T09:06:00.297Z
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+ΓöÇΓöÇ PHASE 1: AUTHENTICATION ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #01 | 401 | Admin Login | Invalid credentials
+  Γ¥î #03 | 401 | Refresh Token | Refresh token required
+  Γ¥î #04 | 401 | Change Password | Please authenticate
+  Γ¥î #05 | 401 | Logout | Please authenticate
+
+ΓöÇΓöÇ PHASE 2: GROUP MANAGEMENT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #06 | 401 | Create Group | Please authenticate
+  Γ¥î #07 | 401 | Get All Groups | Please authenticate
+  Γ¥î #08 | 401 | Get Group by ID | Please authenticate
+  Γ¥î #09 | 401 | Update Group | Please authenticate
+  Γ¥î #10 | 401 | Get Group Stats | Please authenticate
+
+ΓöÇΓöÇ PHASE 3: STUDENT MANAGEMENT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #11 | 401 | Create Student | Please authenticate
+  Γ¥î #12 | 401 | Bulk Create Students | Please authenticate
+  Γ¥î #13 | 401 | Get All Students | Please authenticate
+  Γ¥î #14 | 401 | Get Student by ID | Please authenticate
+  Γ¥î #15 | 401 | Update Student | Please authenticate
+  Γ¥î #16 | 401 | Toggle Student Status | Please authenticate
+  Γ¥î #17 | 401 | Reset Student Password | Please authenticate
+
+ΓöÇΓöÇ PHASE 4: STUDENT AUTH ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #18 | 401 | Student Login | Invalid credentials
+
+ΓöÇΓöÇ PHASE 5: EXAM MANAGEMENT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #19 | 401 | Create Exam | Please authenticate
+  Γ¥î #20 | 401 | Upload Questions (no file - validation test) | Please authenticate
+  Γ¥î #21 | 401 | Assign Exam | Please authenticate
+  Γ¥î #22 | 401 | Get All Exams | Please authenticate
+  Γ¥î #23 | 401 | Get Exam by ID | Please authenticate
+
+ΓöÇΓöÇ PHASE 6: STUDENT EXAM FLOW ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #24 | 401 | Get Ongoing Exams (Student) | Please authenticate
+  Γ¥î #25 | 401 | Start Exam | Please authenticate
+  Γ¥î #26 | ??? | Save Answer | No attemptId or questionId (depends on #25)
+  Γ¥î #27 | ??? | Record Violation | No attemptId
+  Γ¥î #28 | ??? | Submit Exam | No attemptId
+
+ΓöÇΓöÇ PHASE 7: ADMIN EXAM TRACKING ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #29 | 401 | Get Assignments | Please authenticate
+  Γ¥î #30 | 401 | Get Exam Results | Please authenticate
+  Γ¥î #31 | 401 | Update Exam | Please authenticate
+
+ΓöÇΓöÇ PHASE 8: RESULT MANAGEMENT ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #32 | 401 | Get All Results | Please authenticate
+  Γ¥î #33 | 401 | Get My Results (Student) | Please authenticate
+  Γ¥î #34 | ??? | Get Result by ID | No resultId available
+  Γ¥î #35 | 401 | Publish Results | Please authenticate
+  Γ¥î #36 | 401 | Unpublish Results | Please authenticate
+  Γ¥î #37 | ??? | Update Result | No resultId available
+  Γ¥î #38 | 401 | Get Result Analytics | Please authenticate
+
+ΓöÇΓöÇ PHASE 9: DASHBOARD ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #39 | 401 | Admin Dashboard | Please authenticate
+  Γ¥î #40 | 401 | Student Dashboard | Please authenticate
+  Γ¥î #41 | 401 | Student Exam Stats | Please authenticate
+
+ΓöÇΓöÇ PHASE 10: REPORTS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #42 | 401 | Analytics Report | Please authenticate
+  Γ¥î #43 | 401 | Students CSV Report | Please authenticate
+  Γ¥î #44 | 401 | Students Excel Report | Please authenticate
+  Γ¥î #45 | 401 | Exams Report | Please authenticate
+  Γ¥î #46 | 401 | Results Report | Please authenticate
+  Γ¥î #47 | 401 | Group Report | Please authenticate
+  Γ¥î #48 | 401 | Performance Report | Please authenticate
+
+ΓöÇΓöÇ PHASE 11: VALIDATION ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ£à #49 | 401 | Auth Validation (No Token)
+
+ΓöÇΓöÇ PHASE 12: EXTRA ENDPOINTS ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ¥î #50 | 401 | Student Exam History | Please authenticate
+
+ΓöÇΓöÇ PHASE 13: CLEANUP ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ£à #51 | 200 | Delete Bulk Students
+  Γ¥î #52 | 401 | Delete Student | Please authenticate
+  Γ¥î #53 | 401 | Delete Group | Please authenticate
+  Γ¥î #54 | 401 | Delete Exam (Blocked - Has Attempts) | Please authenticate
+
+ΓöÇΓöÇ PHASE 14: SYSTEM CHECK ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  Γ£à #55 | 200 | Health Check
+
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  TEST SUMMARY
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  Total APIs tested : 54
+  Γ£à Passed         : 3
+  Γ¥î Failed         : 51
+  Pass Rate         : 5.6%
+
+  Issues Found:
+    ΓÇó #1 Admin Login: Invalid credentials
+    ΓÇó #3 Refresh Token: Refresh token required
+    ΓÇó #4 Change Password: Please authenticate
+    ΓÇó #5 Logout: Please authenticate
+    ΓÇó #6 Create Group: Please authenticate
+    ΓÇó #7 Get All Groups: Please authenticate
+    ΓÇó #8 Get Group by ID: Please authenticate
+    ΓÇó #9 Update Group: Please authenticate
+    ΓÇó #10 Get Group Stats: Please authenticate
+    ΓÇó #11 Create Student: Please authenticate
+    ΓÇó #12 Bulk Create Students: Please authenticate
+    ΓÇó #13 Get All Students: Please authenticate
+    ΓÇó #14 Get Student by ID: Please authenticate
+    ΓÇó #15 Update Student: Please authenticate
+    ΓÇó #16 Toggle Student Status: Please authenticate
+    ΓÇó #17 Reset Student Password: Please authenticate
+    ΓÇó #18 Student Login: Invalid credentials
+    ΓÇó #19 Create Exam: Please authenticate
+    ΓÇó #20 Upload Questions (no file - validation test): Please authenticate
+    ΓÇó #21 Assign Exam: Please authenticate
+    ΓÇó #22 Get All Exams: Please authenticate
+    ΓÇó #23 Get Exam by ID: Please authenticate
+    ΓÇó #24 Get Ongoing Exams (Student): Please authenticate
+    ΓÇó #25 Start Exam: Please authenticate
+    ΓÇó #26 Save Answer: No attemptId or questionId (depends on #25)
+    ΓÇó #27 Record Violation: No attemptId
+    ΓÇó #28 Submit Exam: No attemptId
+    ΓÇó #29 Get Assignments: Please authenticate
+    ΓÇó #30 Get Exam Results: Please authenticate
+    ΓÇó #31 Update Exam: Please authenticate
+    ΓÇó #32 Get All Results: Please authenticate
+    ΓÇó #33 Get My Results (Student): Please authenticate
+    ΓÇó #34 Get Result by ID: No resultId available
+    ΓÇó #35 Publish Results: Please authenticate
+    ΓÇó #36 Unpublish Results: Please authenticate
+    ΓÇó #37 Update Result: No resultId available
+    ΓÇó #38 Get Result Analytics: Please authenticate
+    ΓÇó #39 Admin Dashboard: Please authenticate
+    ΓÇó #40 Student Dashboard: Please authenticate
+    ΓÇó #41 Student Exam Stats: Please authenticate
+    ΓÇó #42 Analytics Report: Please authenticate
+    ΓÇó #43 Students CSV Report: Please authenticate
+    ΓÇó #44 Students Excel Report: Please authenticate
+    ΓÇó #45 Exams Report: Please authenticate
+    ΓÇó #46 Results Report: Please authenticate
+    ΓÇó #47 Group Report: Please authenticate
+    ΓÇó #48 Performance Report: Please authenticate
+    ΓÇó #50 Student Exam History: Please authenticate
+    ΓÇó #52 Delete Student: Please authenticate
+    ΓÇó #53 Delete Group: Please authenticate
+    ΓÇó #54 Delete Exam (Blocked - Has Attempts): Please authenticate
+
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  Finished: 2026-03-17T09:06:01.160Z
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
