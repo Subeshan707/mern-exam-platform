@@ -39,22 +39,44 @@ exports.getAdminDashboard = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(10);
 
-    // Get upcoming exams
-    const upcomingExams = await Exam.find({
-      date: { $gt: new Date() },
-      status: 'published'
-    })
-    .sort({ date: 1 })
-    .limit(5);
+    // Get Pass/Fail stats
+    const passCount = await Result.countDocuments({ isPass: true });
+    const failCount = await Result.countDocuments({ isPass: false });
 
-    // Get exam statistics
-    const examStats = await Exam.aggregate([
+    // Get recent exams
+    const recentExams = await Exam.find()
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    // Get exam performance statistics (Option B real data)
+    const examStats = await Result.aggregate([
       {
         $group: {
-          _id: '$status',
-          count: { $sum: 1 }
+          _id: '$exam',
+          students: { $sum: 1 },
+          avgScore: { $avg: '$percentage' }
         }
-      }
+      },
+      {
+        $lookup: {
+          from: 'exams',         // Target the 'exams' collection
+          localField: '_id',
+          foreignField: '_id',
+          as: 'examData'
+        }
+      },
+      { $unwind: '$examData' },
+      {
+        $project: {
+          _id: 0,
+          name: '$examData.name',
+          date: '$examData.createdAt',
+          students: 1,
+          avgScore: { $round: ['$avgScore', 1] }
+        }
+      },
+      { $sort: { date: 1 } },
+      { $limit: 8 }
     ]);
 
     // Get recent activities
@@ -104,11 +126,9 @@ exports.getAdminDashboard = async (req, res) => {
           todaysExams,
           ongoingExams
         },
-        examStats: examStats.reduce((acc, stat) => {
-          acc[stat._id] = stat.count;
-          return acc;
-        }, {}),
-        upcomingExams,
+        examStats: examStats,
+        passFailRatio: { pass: passCount, fail: failCount },
+        recentExams,
         recentResults,
         recentActivities
       }

@@ -71,62 +71,89 @@ export default function StudentDashboard() {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Welcome, {user?.name || 'Student'}!</h1>
-          <p className="page-subtitle">Here's your exam overview</p>
+    <div className="page-container" style={{ paddingBottom: '3rem' }}>
+      
+      {/* 1. Creative Welcome Banner */}
+      <div className="welcome-banner">
+        <div className="welcome-shape s1" />
+        <div className="welcome-shape s2" />
+        <div className="welcome-shape s3" />
+        <div className="welcome-content">
+          <h1>Welcome back, {user?.name || 'Student'}!</h1>
+          <p>Here's your learning overview. You have <strong>{data?.stats?.upcomingExams ?? data?.upcomingExams?.length ?? 0}</strong> upcoming exams and an average score of <strong>{data?.stats?.avgScore ?? 0}%</strong>.</p>
         </div>
       </div>
 
-      <div className="stats-grid" style={{ marginBottom: 'var(--space-xl)' }}>
-        <StatsCard title="Upcoming Exams" value={data?.stats?.upcomingExams ?? data?.upcomingExams?.length ?? 0} icon={Calendar} color="blue" />
-        <StatsCard title="Completed" value={data?.stats?.completedExams ?? 0} icon={CheckCircle} color="emerald" />
-        <StatsCard title="Avg Score" value={`${data?.stats?.avgScore ?? 0}%`} icon={Trophy} color="amber" />
-        <StatsCard title="Total Exams" value={data?.stats?.totalExams ?? 0} icon={FileText} color="purple" />
-      </div>
+      <div className="bento-grid">
+        
+        {/* 2. Bento Stats Row */}
+        <div className="bento-item" style={{ gridColumn: 'span 3' }}>
+          <StatsCard title="Upcoming Exams" value={data?.stats?.upcomingExams ?? data?.upcomingExams?.length ?? 0} icon={Calendar} color="blue" subtitle="Scheduled tests" />
+        </div>
+        <div className="bento-item" style={{ gridColumn: 'span 3' }}>
+          <StatsCard title="Completed" value={data?.stats?.completedExams ?? 0} icon={CheckCircle} color="emerald" subtitle="Exams finished" />
+        </div>
+        <div className="bento-item" style={{ gridColumn: 'span 3' }}>
+          <StatsCard title="Avg Score" value={`${data?.stats?.avgScore ?? 0}%`} icon={Trophy} color="amber" subtitle="Overall performance" />
+        </div>
+        <div className="bento-item" style={{ gridColumn: 'span 3' }}>
+          <StatsCard title="Total Assigned" value={data?.stats?.totalExams ?? 0} icon={FileText} color="purple" subtitle="All platform exams" />
+        </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-        <div className="glass-card">
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 'var(--space-md)' }}>Upcoming Exams</h3>
+        {/* 3. Upcoming Exams (Left Half) */}
+        <div className="bento-item" style={{ gridColumn: 'span 6', minHeight: '350px' }}>
+          <div className="flex justify-between items-center" style={{ marginBottom: 'var(--space-md)' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 700 }}>Upcoming Exams</h3>
+            <button style={{ color: 'var(--accent-blue)', fontSize: '0.875rem', fontWeight: 600 }} onClick={() => navigate('/student/exams')}>View All →</button>
+          </div>
           {(!data?.upcomingExams?.length) ? (
-            <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '2rem 0' }}>No upcoming exams</p>
+            <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '2rem 0', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>No upcoming exams scheduled right now.</p>
           ) : data.upcomingExams.map(exam => (
             <div key={exam._id} style={{
-              padding: '0.875rem', background: 'var(--bg-glass)', borderRadius: 'var(--radius-md)',
-              marginBottom: '0.5rem', cursor: 'pointer', border: '1px solid var(--border-color)',
-              transition: 'all 0.2s',
-            }} onClick={() => navigate('/student/exams')}>
+              padding: '1rem', background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)',
+              marginBottom: '0.75rem', cursor: 'pointer', border: '1px solid var(--border-color)',
+              transition: 'all 0.2s', display: 'flex', flexDirection: 'column', gap: '0.5rem'
+            }} onClick={() => navigate('/student/exams')}
+               onMouseOver={(e) => { e.currentTarget.style.borderColor = 'var(--accent-blue)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+               onMouseOut={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.transform = 'none' }}
+            >
               <div className="flex justify-between items-center">
-                <span style={{ fontWeight: 600 }}>{exam.exam?.name || exam.name}</span>
-                <Badge variant="info" size="sm">{exam.exam?.duration || exam.duration}m</Badge>
+                <span style={{ fontWeight: 600, fontSize: '1rem' }}>{exam.exam?.name || exam.name}</span>
+                <Badge variant="info" size="sm"><Clock size={14} style={{ marginRight: '4px', display: 'inline' }}/>{exam.exam?.duration || exam.duration}m</Badge>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                <Calendar size={14} style={{ marginRight: '6px', display: 'inline', verticalAlign: 'text-bottom' }} />
                 {new Date(exam.exam?.date || exam.date).toLocaleDateString()} at {exam.exam?.startTime || exam.startTime}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="glass-card">
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 'var(--space-md)' }}>Recent Results</h3>
+        {/* 4. Recent Results (Right Half) */}
+        <div className="bento-item" style={{ gridColumn: 'span 6', minHeight: '350px' }}>
+          <div className="flex justify-between items-center" style={{ marginBottom: 'var(--space-md)' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 700 }}>Recent Results</h3>
+            <button style={{ color: 'var(--accent-blue)', fontSize: '0.875rem', fontWeight: 600 }} onClick={() => navigate('/student/results')}>View All →</button>
+          </div>
           {(!data?.recentResults?.length) ? (
-            <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '2rem 0' }}>No results yet</p>
+            <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '2rem 0', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>You haven't completed any exams yet.</p>
           ) : data.recentResults.map(r => (
             <div key={r._id} style={{
-              padding: '0.875rem', background: 'var(--bg-glass)', borderRadius: 'var(--radius-md)',
-              marginBottom: '0.5rem', border: '1px solid var(--border-color)',
+              padding: '1rem', background: 'var(--bg-primary)', borderRadius: 'var(--radius-md)',
+              marginBottom: '0.75rem', border: '1px solid var(--border-color)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between'
             }}>
-              <div className="flex justify-between items-center">
-                <span style={{ fontWeight: 600 }}>{r.exam?.name || 'Exam'}</span>
-                <Badge variant={r.isPass ? 'success' : 'danger'}>{r.grade || (r.isPass ? 'Pass' : 'Fail')}</Badge>
+              <div>
+                <span style={{ fontWeight: 600, fontSize: '1rem', display: 'block', marginBottom: '0.25rem' }}>{r.exam?.name || 'Exam'}</span>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                  Score: <strong style={{color: 'var(--text-primary)'}}>{r.marksObtained}/{r.totalMarks}</strong> ({Number(r.percentage || 0).toFixed(1)}%)
+                </p>
               </div>
-              <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                Score: {r.marksObtained}/{r.totalMarks} ({Number(r.percentage || 0).toFixed(1)}%)
-              </p>
+              <Badge variant={r.isPass ? 'success' : 'danger'} size="lg">{r.grade || (r.isPass ? 'Pass' : 'Fail')}</Badge>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );

@@ -2,12 +2,12 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 
 export default function StatsCard({ title, value, subtitle, icon: Icon, trend, trendValue, color = 'blue' }) {
   const colors = {
-    blue:    { gradient: 'linear-gradient(135deg, #3b82f6, #6366f1)', glow: 'rgba(59,130,246,0.2)' },
-    emerald: { gradient: 'linear-gradient(135deg, #10b981, #059669)', glow: 'rgba(16,185,129,0.2)' },
-    amber:   { gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', glow: 'rgba(245,158,11,0.2)' },
-    rose:    { gradient: 'linear-gradient(135deg, #f43f5e, #e11d48)', glow: 'rgba(244,63,94,0.2)' },
-    purple:  { gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', glow: 'rgba(139,92,246,0.2)' },
-    cyan:    { gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)', glow: 'rgba(6,182,212,0.2)' },
+    blue:    { gradient: 'linear-gradient(135deg, #3b82f6, #6366f1)', glow: 'rgba(59,130,246,0.1)' },
+    emerald: { gradient: 'linear-gradient(135deg, #10b981, #059669)', glow: 'rgba(16,185,129,0.1)' },
+    amber:   { gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', glow: 'rgba(245,158,11,0.1)' },
+    rose:    { gradient: 'linear-gradient(135deg, #f43f5e, #e11d48)', glow: 'rgba(244,63,94,0.1)' },
+    purple:  { gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', glow: 'rgba(139,92,246,0.1)' },
+    cyan:    { gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)', glow: 'rgba(6,182,212,0.1)' },
   };
 
   const c = colors[color] || colors.blue;

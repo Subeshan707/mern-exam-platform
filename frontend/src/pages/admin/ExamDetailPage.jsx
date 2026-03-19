@@ -6,7 +6,7 @@ import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
 import Modal from '../../components/ui/Modal';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
-import { ArrowLeft, Calendar, Clock, FileText, Users, Send, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, FileText, Users, Send, CheckCircle, Edit2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const statusMap = {
@@ -71,6 +71,16 @@ export default function ExamDetailPage() {
     finally { setAssigning(false); }
   };
 
+  const handleUpdateStatus = async (newStatus) => {
+    try {
+      const res = await api.put(EXAMS.UPDATE(id), { status: newStatus });
+      setExam(res.data.data || res.data.exam || res.data);
+      toast.success(`Exam status updated to ${newStatus}`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update status');
+    }
+  };
+
   if (loading) return <LoadingSpinner />;
   if (!exam) return null;
 
@@ -90,6 +100,13 @@ export default function ExamDetailPage() {
           </div>
         </div>
         <div className="page-actions">
+          <Button variant="secondary" icon={Edit2} onClick={() => navigate(`/admin/exams/${id}/edit`)}>Edit</Button>
+          {exam.status === 'draft' && (
+            <Button style={{ background: '#10b981', color: 'white' }} icon={CheckCircle} onClick={() => handleUpdateStatus('published')}>Publish</Button>
+          )}
+          {exam.status === 'published' && (
+            <Button variant="secondary" onClick={() => handleUpdateStatus('draft')}>Revert to Draft</Button>
+          )}
           <Button variant="secondary" icon={Send} onClick={() => setAssignModal(true)}>Assign</Button>
         </div>
       </div>

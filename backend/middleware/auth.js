@@ -13,7 +13,7 @@ const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     let user;
-    if (decoded.role === 'admin') {
+    if (decoded.role === 'admin' || decoded.role === 'superadmin') {
       user = await Admin.findById(decoded.id).select('-password -refreshToken');
     } else {
       user = await Student.findById(decoded.id).select('-password -refreshToken').populate('group');
@@ -37,7 +37,7 @@ const authenticate = async (req, res, next) => {
 };
 
 const authorizeAdmin = (req, res, next) => {
-  if (req.userRole !== 'admin') {
+  if (req.userRole !== 'admin' && req.userRole !== 'superadmin') {
     return res.status(403).json({ 
       success: false,
       message: 'Access denied. Admin only.' 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import { EXAMS, GROUPS } from '../../api/endpoints';
 import Button from '../../components/ui/Button';
@@ -10,6 +10,7 @@ const emptyQ = { question: '', options: { A: '', B: '', C: '', D: '' }, correctA
 
 export default function ExamFormPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
   const [groups, setGroups] = useState([]);
@@ -23,7 +24,21 @@ export default function ExamFormPage() {
 
   useEffect(() => {
     api.get(GROUPS.LIST).then(r => setGroups(r.data.data || r.data.groups || [])).catch(() => {});
-  }, []);
+    if (id) {
+      api.get(EXAMS.DETAIL(id)).then(r => {
+        const data = r.data.data || r.data.exam || r.data;
+        const dateStr = data.date ? new Date(data.date).toISOString().split('T')[0] : '';
+        setForm({
+          name: data.name || '', description: data.description || '',
+          instructions: data.instructions || '', date: dateStr,
+          startTime: data.startTime || '09:00', duration: data.duration || 60,
+          passMark: data.passMark || 40, category: data.category || 'Quiz',
+          questions: data.questions?.length ? data.questions : [{ ...emptyQ }],
+          settings: data.settings || form.settings,
+        });
+      }).catch(() => toast.error('Failed to load exam details'));
+    }
+  }, [id]);
 
   const updateQ = (i, field, value) => {
     const qs = [...form.questions];
@@ -47,11 +62,16 @@ export default function ExamFormPage() {
     setSaving(true);
     try {
       const totalMarks = form.questions.reduce((s, q) => s + Number(q.marks), 0);
-      await api.post(EXAMS.CREATE, { ...form, totalMarks });
-      toast.success('Exam created!');
+      if (id) {
+        await api.put(EXAMS.UPDATE(id), { ...form, totalMarks });
+        toast.success('Exam updated!');
+      } else {
+        await api.post(EXAMS.CREATE, { ...form, totalMarks });
+        toast.success('Exam created!');
+      }
       navigate('/admin/exams');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to create exam');
+      toast.error(err.response?.data?.message || 'Failed to save exam');
     } finally { setSaving(false); }
   };
 
@@ -60,7 +80,7 @@ export default function ExamFormPage() {
       <div className="page-header">
         <div className="flex items-center gap-md">
           <Button variant="ghost" icon={ArrowLeft} onClick={() => navigate('/admin/exams')} />
-          <div><h1 className="page-title">Create Exam</h1>
+          <div><h1 className="page-title">{id ? 'Edit Exam' : 'Create Exam'}</h1>
             <p className="page-subtitle">Step {step} of 3</p></div>
         </div>
       </div>
@@ -191,7 +211,7 @@ export default function ExamFormPage() {
             </div>
             <div className="flex justify-between" style={{ marginTop: '1rem' }}>
               <Button variant="secondary" onClick={() => setStep(2)}>← Back</Button>
-              <Button icon={Save} onClick={handleSubmit} loading={saving}>Create Exam</Button>
+              <Button icon={Save} onClick={handleSubmit} loading={saving}>{id ? 'Update Exam' : 'Create Exam'}</Button>
             </div>
           </div>
         </div>

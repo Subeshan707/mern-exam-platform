@@ -19,7 +19,6 @@ const navItems = [
 export default function AdminLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -30,23 +29,15 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-layout">
-      {/* Sidebar */}
-      <aside className={`admin-sidebar ${sidebarOpen ? '' : 'collapsed'} ${mobileOpen ? 'mobile-open' : ''}`}>
+      {/* Sidebar — hover to expand */}
+      <aside className={`admin-sidebar ${mobileOpen ? 'mobile-open expanded' : ''}`}>
         <div className="sidebar-header">
-          {sidebarOpen && (
-            <div className="sidebar-brand">
-              <div className="brand-icon">
-                <GraduationCap size={24} />
-              </div>
-              <span className="brand-text">ExamPro</span>
+          <div className="sidebar-brand">
+            <div className="brand-icon">
+              <GraduationCap size={24} />
             </div>
-          )}
-          <button className="sidebar-toggle desktop-only" onClick={() => setSidebarOpen(!sidebarOpen)}>
-            <Menu size={18} />
-          </button>
-          <button className="sidebar-toggle mobile-only" onClick={() => setMobileOpen(false)}>
-            <X size={18} />
-          </button>
+            <span className="brand-text">ExamPro</span>
+          </div>
         </div>
 
         <nav className="sidebar-nav">
@@ -59,7 +50,7 @@ export default function AdminLayout() {
               onClick={() => setMobileOpen(false)}
             >
               <item.icon size={20} />
-              {sidebarOpen && <span>{item.label}</span>}
+              <span>{item.label}</span>
             </NavLink>
           ))}
         </nav>
@@ -67,7 +58,7 @@ export default function AdminLayout() {
         <div className="sidebar-footer">
           <button className="nav-item logout-btn" onClick={handleLogout}>
             <LogOut size={20} />
-            {sidebarOpen && <span>Logout</span>}
+            <span>Logout</span>
           </button>
         </div>
       </aside>
@@ -76,13 +67,21 @@ export default function AdminLayout() {
       {mobileOpen && <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />}
 
       {/* Main */}
-      <div className={`admin-main ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
+      <div className="admin-main">
         {/* Header */}
         <header className="admin-header">
           <div className="header-left">
             <button className="mobile-menu-btn mobile-only" onClick={() => setMobileOpen(true)}>
               <Menu size={20} />
             </button>
+            <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <h1 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                ExamPro 
+              </h1>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.875rem', paddingLeft: '0.75rem', borderLeft: '1px solid var(--border-color)' }}>
+                Welcome back, {user?.username}!
+              </span>
+            </div>
           </div>
 
           <div className="header-right">
@@ -95,7 +94,7 @@ export default function AdminLayout() {
               <div className="profile-avatar">
                 {user?.username?.[0]?.toUpperCase() || 'A'}
               </div>
-              {<span className="profile-name">{user?.username || 'Admin'}</span>}
+              <span className="profile-name">{user?.username || 'Admin'}</span>
               <ChevronDown size={14} style={{ color: 'var(--text-muted)' }} />
 
               {profileOpen && (

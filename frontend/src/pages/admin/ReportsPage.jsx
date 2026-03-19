@@ -81,7 +81,7 @@ export default function ReportsPage() {
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>Monthly Exams</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={toArray(analytics?.monthlyData)}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
               <XAxis dataKey="month" stroke="var(--text-muted)" fontSize={12} />
               <YAxis stroke="var(--text-muted)" fontSize={12} />
               <Tooltip content={<CustomTooltip />} />
@@ -94,7 +94,7 @@ export default function ReportsPage() {
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 'var(--space-lg)' }}>Performance Trend</h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={toArray(analytics?.performanceData)}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
               <XAxis dataKey="month" stroke="var(--text-muted)" fontSize={12} />
               <YAxis stroke="var(--text-muted)" fontSize={12} />
               <Tooltip content={<CustomTooltip />} />

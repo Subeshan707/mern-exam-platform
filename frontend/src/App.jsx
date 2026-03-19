@@ -48,6 +48,7 @@ function AppRoutes() {
         <Route path="exams" element={<ExamsPage />} />
         <Route path="exams/new" element={<ExamFormPage />} />
         <Route path="exams/:id" element={<ExamDetailPage />} />
+        <Route path="exams/:id/edit" element={<ExamFormPage />} />
         <Route path="results" element={<ResultsPage />} />
         <Route path="reports" element={<ReportsPage />} />
       </Route>

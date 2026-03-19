@@ -4,7 +4,7 @@ const variants = {
   warning:  { bg: 'rgba(245,158,11,0.15)',  color: '#f59e0b', border: 'rgba(245,158,11,0.3)' },
   info:     { bg: 'rgba(59,130,246,0.15)',   color: '#3b82f6', border: 'rgba(59,130,246,0.3)' },
   purple:   { bg: 'rgba(139,92,246,0.15)',   color: '#8b5cf6', border: 'rgba(139,92,246,0.3)' },
-  default:  { bg: 'rgba(255,255,255,0.05)',  color: '#94a3b8', border: 'rgba(255,255,255,0.1)' },
+  default:  { bg: 'rgba(0,0,0,0.04)',        color: '#64748b', border: 'rgba(0,0,0,0.08)' },
 };
 
 export default function Badge({ children, variant = 'default', dot, size = 'md' }) {

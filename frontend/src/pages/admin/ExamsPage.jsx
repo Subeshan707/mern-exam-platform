@@ -8,7 +8,7 @@ import SearchInput from '../../components/ui/SearchInput';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import EmptyState from '../../components/ui/EmptyState';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
-import { Plus, Eye, Trash2, FileText, Calendar, Clock } from 'lucide-react';
+import { Plus, Eye, Trash2, FileText, Calendar, Clock, Edit2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const statusMap = {
@@ -96,9 +96,10 @@ export default function ExamsPage() {
                   <span className="flex items-center gap-xs"><FileText size={13}/>{exam.questions?.length||0} Q</span>
                 </div>
                 <div className="flex justify-between items-center" style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
-                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Total: {exam.totalMarks||0} | Pass: {exam.passMark||0}</span>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>Total Marks: {exam.totalMarks||0} | Pass Mark: {exam.passMark||0}</span>
                   <div className="flex gap-xs" onClick={e => e.stopPropagation()}>
                     <Button variant="ghost" size="sm" icon={Eye} onClick={() => navigate(`/admin/exams/${exam._id}`)} />
+                    <Button variant="ghost" size="sm" icon={Edit2} onClick={() => navigate(`/admin/exams/${exam._id}/edit`)} />
                     <Button variant="ghost" size="sm" icon={Trash2} onClick={() => setDeleteId(exam._id)} />
                   </div>
                 </div>

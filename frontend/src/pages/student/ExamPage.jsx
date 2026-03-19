@@ -72,7 +72,7 @@ export default function ExamPage() {
       const attemptId = getAttemptId();
       await api.post(EXAMS.AUTO_SUBMIT(attemptId), { answers });
       if (showToast) {
-        toast('Time is up! Exam auto-submitted.', { icon: '⏰' });
+        toast('Time is up! Exam auto-submitted.', { icon: '⏱️' });
       }
       navigate('/student/results');
     } catch {
